@@ -19,7 +19,16 @@ TicTacToeBoard::TicTacToeBoard()
 **/
 Piece TicTacToeBoard::toggleTurn()
 {
-  return Invalid;
+  if (turn == X)
+    turn = O;
+  
+  else if (turn == O)
+    turn = X;
+  
+  else
+    return Invalid; //should never reach here.
+    
+  return turn;
 }
 
 /**
@@ -33,7 +42,17 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-  return Invalid;
+  // Out of bounds
+  if( row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
+    return Invalid;
+    
+  if(board[row][column] != Blank)
+    return board[row][column];
+    
+  board[row][column] = turn;
+  toggleTurn();
+  
+  return board[row][column];
 }
 
 /**
@@ -42,7 +61,11 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 **/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  return Invalid;
+  // Out of bounds
+  if( row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
+    return Invalid;
+  
+  return board[row][column];
 }
 
 /**
@@ -51,5 +74,63 @@ Piece TicTacToeBoard::getPiece(int row, int column)
 **/
 Piece TicTacToeBoard::getWinner()
 {
-  return Invalid;
+  int counter = 0;
+  Piece cur;
+  // Check Rows
+  for(int i=0; i<BOARDSIZE || counter != 3; i++){
+    for(int j=0; j<BOARDSIZE; j++){
+      if (getPiece(i,j) == Blank)
+        return Invalid;
+      
+      if (j>0 && getPiece(i,j) != getPiece(i,j-1))
+        counter = 0;
+        
+      counter++;
+      cur = getPiece(i,j);
+    }
+  }
+      
+  // Check Columns
+  for(int j=0; j<BOARDSIZE  || counter != 3; j++){
+    for(int i=0; i<BOARDSIZE; i++){
+      if (getPiece(i,j) == Blank)
+        return Invalid;
+      
+      if (i>0 && getPiece(i,j) != getPiece(i-1,j))
+        counter = 0;
+        
+      counter++;
+      cur = getPiece(i,j);
+    }
+  }
+  
+  // Check Diagonal 1
+  for(int i=0; i<BOARDSIZE  || counter != 3; i++){
+    if (getPiece(i,i) == Blank)
+      return Invalid;
+    
+    if (i>0 && getPiece(i,i) != getPiece(i-1,i-1))
+      counter = 0;
+      
+    counter++;
+    cur = getPiece(i,i);
+  }
+  
+  // Check Diagonal 2
+  for(int i=BOARDSIZE-1; i>=0  || counter != 3; i--){
+    if (getPiece(i,i) == Blank)
+      return Invalid;
+    
+    if (i>0 && getPiece(i,i) != getPiece(i+1,i+1))
+      counter = 0;
+      
+    counter++;
+    cur = getPiece(i,i);
+  }
+  
+  if (counter == 0)
+    return Blank;
+  else
+    return cur;
+  
 }
