@@ -42,12 +42,17 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
+  Piece gameOver = getWinner();
+  
+  if (gameOver == Blank)
+    return getPiece(row, column);
+  
   // Out of bounds
   if( row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
     return Invalid;
     
-  if(board[row][column] != Blank)
-    return board[row][column];
+  if(getPiece(row, column) != Blank)
+    return getPiece(row, column);
     
   board[row][column] = turn;
   toggleTurn();
@@ -76,11 +81,13 @@ Piece TicTacToeBoard::getWinner()
 {
   int counter = 0;
   Piece cur;
+  bool unfinished=false;
+  
   // Check Rows
   for(int i=0; i<BOARDSIZE || counter != 3; i++){
     for(int j=0; j<BOARDSIZE; j++){
       if (getPiece(i,j) == Blank)
-        return Invalid;
+        unfinished=true;
       
       if (j>0 && getPiece(i,j) != getPiece(i,j-1))
         counter = 0;
@@ -94,7 +101,7 @@ Piece TicTacToeBoard::getWinner()
   for(int j=0; j<BOARDSIZE  || counter != 3; j++){
     for(int i=0; i<BOARDSIZE; i++){
       if (getPiece(i,j) == Blank)
-        return Invalid;
+        unfinished=true;
       
       if (i>0 && getPiece(i,j) != getPiece(i-1,j))
         counter = 0;
@@ -107,7 +114,7 @@ Piece TicTacToeBoard::getWinner()
   // Check Diagonal 1
   for(int i=0; i<BOARDSIZE  || counter != 3; i++){
     if (getPiece(i,i) == Blank)
-      return Invalid;
+      unfinished=true;
     
     if (i>0 && getPiece(i,i) != getPiece(i-1,i-1))
       counter = 0;
@@ -119,7 +126,7 @@ Piece TicTacToeBoard::getWinner()
   // Check Diagonal 2
   for(int i=BOARDSIZE-1; i>=0  || counter != 3; i--){
     if (getPiece(i,i) == Blank)
-      return Invalid;
+      unfinished=true;
     
     if (i>0 && getPiece(i,i) != getPiece(i+1,i+1))
       counter = 0;
@@ -128,9 +135,11 @@ Piece TicTacToeBoard::getWinner()
     cur = getPiece(i,i);
   }
   
-  if (counter == 0)
-    return Blank;
-  else
+  if (counter == 3)
     return cur;
+  else if (unfinished == true)
+    return Invalid;
+  else
+    return Blank;
   
 }
