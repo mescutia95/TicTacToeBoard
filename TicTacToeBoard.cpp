@@ -42,10 +42,10 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-  Piece gameOver = getWinner();
+  //Piece gameOver = getWinner();
   
-  if (gameOver == Blank)
-    return getPiece(row, column);
+  //if (gameOver == Blank)
+    //return getPiece(row, column);
   
   // Out of bounds
   if( row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
