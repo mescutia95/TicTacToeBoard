@@ -1,4 +1,6 @@
 #include "TicTacToeBoard.h"
+#include <iostream>
+using namespace std;
 /**
  * Class for representing a 3x3 Tic-Tac-Toe game board, using the Piece enum
  * to represent the spaces on the board.
@@ -42,10 +44,10 @@ Piece TicTacToeBoard::toggleTurn()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-  //Piece gameOver = getWinner();
+  Piece gameOver = getWinner();
   
-  //if (gameOver == Blank)
-    //return getPiece(row, column);
+  if (gameOver == Blank)
+    return getPiece(row, column);
   
   // Out of bounds
   if( row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
@@ -84,54 +86,54 @@ Piece TicTacToeBoard::getWinner()
   bool unfinished=false;
   
   // Check Rows
-  for(int i=0; i<BOARDSIZE || counter != 3; i++){
+  for(int i=0, counter=0; i<BOARDSIZE && counter != 3; i++){
     for(int j=0; j<BOARDSIZE; j++){
       if (getPiece(i,j) == Blank)
         unfinished=true;
       
       if (j>0 && getPiece(i,j) != getPiece(i,j-1))
         counter = 0;
-        
-      counter++;
+      else  
+        counter++;
       cur = getPiece(i,j);
     }
   }
-      
+  
   // Check Columns
-  for(int j=0; j<BOARDSIZE  || counter != 3; j++){
+  for(int j=0, counter=0; j<BOARDSIZE  && counter != 3; j++){
     for(int i=0; i<BOARDSIZE; i++){
       if (getPiece(i,j) == Blank)
         unfinished=true;
       
       if (i>0 && getPiece(i,j) != getPiece(i-1,j))
         counter = 0;
-        
-      counter++;
+      else  
+        counter++;
       cur = getPiece(i,j);
     }
   }
   
   // Check Diagonal 1
-  for(int i=0; i<BOARDSIZE  || counter != 3; i++){
+  for(int i=0, counter=0; i<BOARDSIZE  || counter != 3; i++){
     if (getPiece(i,i) == Blank)
       unfinished=true;
     
     if (i>0 && getPiece(i,i) != getPiece(i-1,i-1))
       counter = 0;
-      
-    counter++;
+    else  
+      counter++;
     cur = getPiece(i,i);
   }
   
   // Check Diagonal 2
-  for(int i=BOARDSIZE-1; i>=0  || counter != 3; i--){
+  for(int i=BOARDSIZE-1, counter=0; i>=0  || counter != 3; i--){
     if (getPiece(i,i) == Blank)
       unfinished=true;
     
     if (i>0 && getPiece(i,i) != getPiece(i+1,i+1))
       counter = 0;
-      
-    counter++;
+    else  
+      counter++;
     cur = getPiece(i,i);
   }
   
